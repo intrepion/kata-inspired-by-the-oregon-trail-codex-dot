@@ -120,3 +120,29 @@ describe('validated saves', () => {
     for (const raw of [null, '', '{}', 'oops', JSON.stringify({ ...started(), version: 2 }), JSON.stringify({ ...started(), food: -1 }), JSON.stringify({ ...started(), day: 999 }), JSON.stringify({ ...started(), miles: 300 }), JSON.stringify({ ...started(), status: 'arrived' }), JSON.stringify({ ...started(), pending: { kind: 'river', id: 99 } }), JSON.stringify({ ...started(), party: [] })]) expect(decodeSave(raw)).toBeNull();
   });
 });
+describe('review regressions', () => {
+  it('rejects event IDs that only coerce to valid property names', () => {
+    expect(decodeSave(JSON.stringify({ ...started(), pending: { kind: 'event', id: ['stranger'] } }))).toBeNull();
+  });
+  it('does not promise uncapped medicine recovery', () => {
+    const s = act({ ...started(), party: started().party.map(p => ({ ...p, health: 95 })) }, { type: 'heal' });
+    expect(s.party[0].health).toBe(100);
+    expect(s.journal.at(-1)).toContain('up to 20 health');
+  });
+});
+describe('weather and clamped encounter effects', () => {
+  it('storms reduce miles and charge extra wear and health', () => {
+    const s = advance(started(5000));
+    expect(s.weather).toBe('Storm'); expect(s.miles).toBe(16); expect(s.wagon).toBe(97); expect(s.party[0].health).toBe(99);
+  });
+  it('orchard rewards stop at capacity and cannot be collected twice', () => {
+    const s: Journey = { ...started(), food: 595, pending: { kind: 'event', id: 'orchard' } };
+    const found = act(s, { type: 'choice', index: 0 });
+    expect(found.food).toBe(600); expect(found.party[0].health).toBe(96);
+    expect(act(found, { type: 'choice', index: 0 })).toEqual(found);
+  });
+  it('pending river saves round-trip and block camp commands', () => {
+    const s: Journey = { ...started(), miles: 280, visited: [0, 1], pending: { kind: 'river', id: 2 } };
+    expect(decodeSave(encodeSave(s))).toEqual(s); expect(act(s, { type: 'repair' })).toEqual(s);
+  });
+});

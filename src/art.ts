@@ -1,4 +1,4 @@
-import type { Journey } from './game';
+import { ROUTE, type Journey } from './game';
 export function landscape(s: Journey) {
   const river = s.pending?.kind === 'river';
   const arrived = s.status === 'arrived';
@@ -31,5 +31,5 @@ export function landscape(s: Journey) {
   </svg>`;
 }
 export function routeMap(s: Journey) {
-  return `<svg viewBox="0 0 940 100" role="img" aria-label="Route progress: ${s.miles} of 720 miles" class="route-map"><path d="M30 51Q120 25 215 50T390 51 575 48 720 51 910 51" fill="none" stroke="#c6c2a7" stroke-width="3" stroke-dasharray="5 6"/><path d="M30 51H${30 + s.miles / 720 * 880}" fill="none" stroke="#49776b" stroke-width="3"/>${[0,160,280,430,540,660,720].map((m,i) => `<circle cx="${30+m/720*880}" cy="51" r="${m === s.miles ? 7 : 5}" fill="${m <= s.miles ? '#2c6456' : '#f2eedb'}" stroke="#557566" stroke-width="2"/><text x="${30+m/720*880}" y="${i % 2 ? 24 : 83}" text-anchor="${i===0?'start':i===6?'end':'middle'}" font-size="12" fill="#506457">${['Briar Landing','Copper Hollow','Glasswater','Juniper Post','Silverbend','Mosslight','Lantern Harbor'][i]}</text>`).join('')}<path d="m${30+s.miles/720*880} 38-5-8h10Z" fill="#b87245"/></svg>`;
+  return `<svg viewBox="0 0 940 100" role="img" aria-label="Route progress: ${s.miles} of 720 miles" class="route-map"><path d="M30 51Q120 25 215 50T390 51 575 48 720 51 910 51" fill="none" stroke="#c6c2a7" stroke-width="3" stroke-dasharray="5 6"/><path d="M30 51H${30 + s.miles / 720 * 880}" fill="none" stroke="#49776b" stroke-width="3"/>${ROUTE.map(({ miles: m, name },i) => `<circle cx="${30+m/720*880}" cy="51" r="${m === s.miles ? 7 : 5}" fill="${m <= s.miles ? '#2c6456' : '#f2eedb'}" stroke="#557566" stroke-width="2"/><text x="${30+m/720*880}" y="${i % 2 ? 24 : 83}" text-anchor="${i===0?'start':i===6?'end':'middle'}" font-size="12" fill="#506457">${name.replace(' River', '').replace(' Camp', '')}</text>`).join('')}<path d="m${30+s.miles/720*880} 38-5-8h10Z" fill="#b87245"/></svg>`;
 }

@@ -30,10 +30,10 @@ export const SHOP: Record<Item, { price: number; amount: number; cap: number; la
   medicine: { price: 10, amount: 1, cap: 12, label: '1 medicine' },
 };
 export const EVENTS: Record<EventId, { title: string; text: string; options: [string, string] }> = {
-  orchard: { title: 'The forgotten orchard', text: 'Beyond a broken fence, small golden fruit hangs above the grass. Gathering it takes a little effort, but the camp could use a brighter supper.', options: ['Gather fruit · +20 food, −4 health', 'Keep your strength · no change'] },
-  axle: { title: 'A song from the axle', text: 'An unfamiliar creak threads through the wheels. A careful patch now could keep the wagon running. Leaving it alone will cost the frame.', options: ['Fit a spare · −1 part, +12 wagon', 'Make do · −12 wagon'] },
+  orchard: { title: 'The forgotten orchard', text: 'Beyond a broken fence, small golden fruit hangs above the grass. Gathering it takes a little effort, but the camp could use a brighter supper.', options: ['Gather fruit · up to +20 food, −4 health', 'Keep your strength · no change'] },
+  axle: { title: 'A song from the axle', text: 'An unfamiliar creak threads through the wheels. A careful patch now could keep the wagon running. Leaving it alone will cost the frame.', options: ['Fit a spare · −1 part, up to +12 wagon', 'Make do · −12 wagon'] },
   stranger: { title: 'A lantern in the dusk', text: 'A lone traveler asks for a meal. In return they offer a few coins and a story of the harbor lights. The choice belongs to your party.', options: ['Share a meal · −12 food, +$9', 'Wish them well · no change'] },
-  fever: { title: 'An uneasy night', text: 'One traveler wakes shivering. A dose from the medicine chest may help. Otherwise the fever will leave its mark before morning.', options: ['Use medicine · −1 dose, +16 weakest health', 'Watch through the night · −12 weakest health'] },
+  fever: { title: 'An uneasy night', text: 'One traveler wakes shivering. A dose from the medicine chest may help. Otherwise the fever will leave its mark before morning.', options: ['Use medicine · −1 dose, up to +16 weakest health', 'Watch through the night · −12 weakest health'] },
   ridge: { title: 'The windward ridge', text: 'A gust tugs at the canvas as the trail opens into a wide green valley. The party can secure the load or press through the wind.', options: ['Secure the load · −5 party health', 'Press ahead · −10 wagon'] },
 };
 export function newJourney(seed = 1847): Journey {
@@ -44,8 +44,14 @@ export function newJourney(seed = 1847): Journey {
       { name: 'Eli', role: 'Cook', health: 100 }, { name: 'Milo', role: 'Storykeeper', health: 100 }],
     visited: [0], market: true, pending: null, journal: ['Day 1 · Briar Landing. Four travelers, one shared horizon.'], ending: '' };
 }
-export const foodCost = (s: Journey) => s.party.filter(p => p.health > 0).length * ({ lean: 1, filling: 1.5, generous: 2 }[s.rations]);
-export const travelMiles = (s: Journey) => ({ gentle: 18, steady: 24, brisk: 32 }[s.pace]);
+export const PACE: Record<Pace, { miles: number; wear: number; health: number }> = {
+  gentle: { miles: 18, wear: 1, health: 1 }, steady: { miles: 24, wear: 2, health: 0 }, brisk: { miles: 32, wear: 3, health: -2 },
+};
+export const RATIONS: Record<Rations, { food: number; health: number }> = {
+  lean: { food: 1, health: -2 }, filling: { food: 1.5, health: 0 }, generous: { food: 2, health: 1 },
+};
+export const foodCost = (s: Journey) => s.party.filter(p => p.health > 0).length * RATIONS[s.rations].food;
+export const travelMiles = (s: Journey) => PACE[s.pace].miles;
 const clamp = (n: number, max = 100) => Math.max(0, Math.min(max, n));
 function note(s: Journey, text: string) { s.journal.push(`Day ${s.day} · ${text}`); s.journal = s.journal.slice(-80); }
 function random(s: Journey) { s.rng = (Math.imul(s.rng, 1664525) + 1013904223) >>> 0; return s.rng / 4294967296; }
@@ -64,7 +70,7 @@ function day(s: Journey, recovery = 0) {
   const shortage = s.food < cost;
   const consumed = Math.min(cost, s.food);
   s.food = Math.max(0, s.food - cost); s.day++;
-  health(s, shortage ? -9 : recovery + ({ lean: -2, filling: 0, generous: 1 }[s.rations]));
+  health(s, shortage ? -9 : recovery + RATIONS[s.rations].health);
   note(s, `Camp used ${consumed} food.${shortage ? ' Hunger costs everyone 9 health.' : ''}`);
 }
 function finish(s: Journey) {
@@ -121,7 +127,7 @@ export function act(state: Journey, action: Action): Journey {
     if (s.status !== 'traveling') return state;
     if (action.type === 'heal') {
       if (!s.medicine || !s.party.some(p => p.health > 0 && p.health < 100)) return state;
-      s.medicine--; weakest(s, 20); note(s, 'Medicine restored 20 health to the weakest living traveler.');
+      s.medicine--; weakest(s, 20); note(s, 'Medicine restored up to 20 health to the weakest living traveler.');
     } else if (action.type === 'repair') {
       if (!s.parts || s.wagon === 100) return state;
       s.parts--; day(s); s.wagon = clamp(s.wagon + 28); note(s, 'A day with the tools: +28 wagon, −1 spare part.');
@@ -133,8 +139,8 @@ export function act(state: Journey, action: Action): Journey {
       s.market = false;
       const roll = random(s); s.weather = roll < .18 ? 'Storm' : roll < .4 ? 'Rain' : roll < .6 ? 'Wind' : 'Clear';
       const distance = travelMiles(s) - (s.weather === 'Storm' ? 8 : s.weather === 'Rain' ? 4 : 0);
-      day(s, ({ gentle: 1, steady: 0, brisk: -2 }[s.pace]) - (s.weather === 'Storm' ? 1 : 0));
-      s.wagon = clamp(s.wagon - ({ gentle: 1, steady: 2, brisk: 3 }[s.pace]) - (s.weather === 'Storm' ? 1 : 0));
+      day(s, PACE[s.pace].health - (s.weather === 'Storm' ? 1 : 0));
+      s.wagon = clamp(s.wagon - PACE[s.pace].wear - (s.weather === 'Storm' ? 1 : 0));
       const next = ROUTE.findIndex((r, i) => r.miles > s.miles && !s.visited.includes(i));
       const before = s.miles; s.miles = Math.min(720, s.miles + distance, next >= 0 ? ROUTE[next].miles : 720);
       note(s, `${s.weather} skies. Traveled ${s.miles - before} miles at ${s.pace} pace.`);
@@ -166,7 +172,7 @@ export function decodeSave(raw: string | null): Journey | null {
       || !Array.isArray(s.journal) || s.journal.length < 1 || s.journal.length > 80 || !s.journal.every(t => typeof t === 'string' && t.length <= 500)
       || !Array.isArray(s.visited) || s.visited.length < 1 || !s.visited.includes(0) || new Set(s.visited).size !== s.visited.length
       || !s.visited.every(i => Number.isInteger(i) && i >= 0 && i < ROUTE.length && ROUTE[i].miles <= s.miles)) return null;
-    if (s.pending !== null && (!s.pending || (s.pending.kind === 'event' ? !Object.hasOwn(EVENTS, s.pending.id) : s.pending.kind === 'river' ? ![2, 4].includes(s.pending.id) || s.miles !== ROUTE[s.pending.id].miles || s.visited.includes(s.pending.id) : true))) return null;
+    if (s.pending !== null && (!s.pending || (s.pending.kind === 'event' ? typeof s.pending.id !== 'string' || !Object.hasOwn(EVENTS, s.pending.id) : s.pending.kind === 'river' ? ![2, 4].includes(s.pending.id) || s.miles !== ROUTE[s.pending.id].miles || s.visited.includes(s.pending.id) : true))) return null;
     const terminal = s.status === 'arrived' || s.status === 'failed';
     const lost = !s.party.some(p => p.health > 0) || s.wagon === 0 || s.day > 55;
     if (s.status === 'arrived' && (s.miles !== 720 || lost) || s.status === 'failed' && !lost
