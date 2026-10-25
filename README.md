@@ -42,3 +42,7 @@ Strict TypeScript + Vite, with no runtime dependencies, remote assets, paid serv
 Local Matt Pocock skills used: Grill with Docs, grilling, domain-modeling, Implement, TDD, and code-review. The official upstream Grill with Docs and Implement pages were checked; their dependencies were read locally. The user's autonomous recommendations replaced the interview rounds and explicit seam confirmations. Decisions and seams were documented before implementation. TDD was applied to the initial economy slice and review fixes; the rest of the core model was built as an integrated slice, followed by behavioral regression coverage, rather than a strict one-test/one-change loop for every rule. Independent Standards and Spec reviews ran in separate agents and their findings were fixed.
 
 No supported tool was available to register an arbitrary new checkout as a Codex sidebar project. The checkout and browser tab are delivered without editing internal app databases or unrelated projects.
+
+## Play online
+
+[Play the hosted game](https://intrepion.github.io/kata-inspired-by-the-oregon-trail-codex-dot/)
