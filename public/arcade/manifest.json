@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "gameId": "kata-inspired-by-the-oregon-trail-codex-dot",
+  "playUrl": "https://intrepion.github.io/kata-inspired-by-the-oregon-trail-codex-dot/",
+  "screenshots": [
+    {
+      "path": "arcade/screenshots/view-01.jpg",
+      "sha256": "efe67f28831e2e4a575bd023629497e3efb5cf14bd66183b92cc4ac3e092b120",
+      "alt": "Gameplay capture 1",
+      "provenance": {
+        "kind": "existing_repository_capture",
+        "sourcePath": "evidence/river-decision.jpg",
+        "deployedBuild": null,
+        "captureDate": null
+      }
+    },
+    {
+      "path": "arcade/screenshots/view-02.jpg",
+      "sha256": "dbc10df1add7135b02152765ca9163b73badd672d6eccd64b6ee2b8204c58c10",
+      "alt": "Gameplay capture 2",
+      "provenance": {
+        "kind": "existing_repository_capture",
+        "sourcePath": "evidence/river-accident.jpg",
+        "deployedBuild": null,
+        "captureDate": null
+      }
+    }
+  ]
+}

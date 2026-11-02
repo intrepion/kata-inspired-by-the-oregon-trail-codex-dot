@@ -46,3 +46,7 @@ No supported tool was available to register an arbitrary new checkout as a Codex
 ## Play online
 
 [Play the hosted game](https://intrepion.github.io/kata-inspired-by-the-oregon-trail-codex-dot/)
+
+## Arcade metadata
+
+See [docs/arcade-metadata.md](docs/arcade-metadata.md) for the game-owned manifest and screenshot provenance.
