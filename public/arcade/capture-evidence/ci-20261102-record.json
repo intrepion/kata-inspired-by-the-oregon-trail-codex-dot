@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "workflowCommit": "8cb191bc4864539ef2a50326becced58df6131d4",
+  "sourceCommit": "539b2a75510d30d8b32efbd6df53d280456d1814",
+  "runId": "41432514981",
+  "url": "http://127.0.0.1:4270/",
+  "inputs": {
+    "index.html": "e7d4657b8f15950d35cf30d2c168a6d336a6f6f84b04554dae8b7adda29af409",
+    "assets/index-CpxMd6jZ.js": "67731314c4cd521bd64333f526edb152c2211c93483ddc046e366f8137d0071c",
+    "assets/index-DyaqD2tj.css": "f0e696b978ad622a21a304c8c5e6092e2a2c38fa040fc49bdfeb31a4c24ef9ce"
+  },
+  "browser": "153.0.8010.12",
+  "viewport": {
+    "width": 1280,
+    "height": 1000
+  },
+  "screenshots": [
+    "long-lantern-01.png",
+    "long-lantern-02.png"
+  ]
+}

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "gameId": "kata-inspired-by-the-oregon-trail-codex-dot",
   "playUrl": "https://intrepion.github.io/kata-inspired-by-the-oregon-trail-codex-dot/",
   "screenshots": [
@@ -23,6 +23,46 @@
         "sourcePath": "evidence/river-accident.jpg",
         "deployedBuild": null,
         "captureDate": null
+      }
+    },
+    {
+      "path": "arcade/screenshots/ci-20261102-01.jpg",
+      "sha256": "8f0b14c49645dfdbe9cbb34f3c2f6e7850409973710aa5165a27a2ec68725234",
+      "alt": "The Long Lantern gameplay, view 1",
+      "provenance": {
+        "kind": "ci_gameplay_capture",
+        "sourcePath": "arcade/capture-evidence/ci-20261102-01.png",
+        "sourceSha256": "753985699d66eee2e7097e47a6b85148282482bfbd28e09a3135b7933adbeae9",
+        "captureCommit": "539b2a75510d30d8b32efbd6df53d280456d1814",
+        "workflowRunId": "41432514981",
+        "inputHashes": {
+          "index.html": "e7d4657b8f15950d35cf30d2c168a6d336a6f6f84b04554dae8b7adda29af409",
+          "assets/index-CpxMd6jZ.js": "67731314c4cd521bd64333f526edb152c2211c93483ddc046e366f8137d0071c",
+          "assets/index-DyaqD2tj.css": "f0e696b978ad622a21a304c8c5e6092e2a2c38fa040fc49bdfeb31a4c24ef9ce"
+        },
+        "publishedFilesVerifiedAt": "2026-11-02T19:01:20Z",
+        "captureRecordPath": "arcade/capture-evidence/ci-20261102-record.json",
+        "captureRecordSha256": "b044d4c718f551dd91debcec650e445af00f78cf9b753b30bb47771ce6a69813"
+      }
+    },
+    {
+      "path": "arcade/screenshots/ci-20261102-02.jpg",
+      "sha256": "c963cad7b9340f70f0358b9aed5124b39aca52d06fb03ed8f34d91b34756ecef",
+      "alt": "The Long Lantern gameplay, view 2",
+      "provenance": {
+        "kind": "ci_gameplay_capture",
+        "sourcePath": "arcade/capture-evidence/ci-20261102-02.png",
+        "sourceSha256": "94ecc98b828450f13f072ff50b8f97cbc32f802a298f60423ddbd92eadb84082",
+        "captureCommit": "539b2a75510d30d8b32efbd6df53d280456d1814",
+        "workflowRunId": "41432514981",
+        "inputHashes": {
+          "index.html": "e7d4657b8f15950d35cf30d2c168a6d336a6f6f84b04554dae8b7adda29af409",
+          "assets/index-CpxMd6jZ.js": "67731314c4cd521bd64333f526edb152c2211c93483ddc046e366f8137d0071c",
+          "assets/index-DyaqD2tj.css": "f0e696b978ad622a21a304c8c5e6092e2a2c38fa040fc49bdfeb31a4c24ef9ce"
+        },
+        "publishedFilesVerifiedAt": "2026-11-02T19:01:20Z",
+        "captureRecordPath": "arcade/capture-evidence/ci-20261102-record.json",
+        "captureRecordSha256": "b044d4c718f551dd91debcec650e445af00f78cf9b753b30bb47771ce6a69813"
       }
     }
   ]
